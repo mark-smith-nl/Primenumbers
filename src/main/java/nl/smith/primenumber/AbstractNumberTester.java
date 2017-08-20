@@ -4,25 +4,25 @@ import static java.math.BigDecimal.ZERO;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public abstract class AbstractNumberTester {
 
-public class PrimenumberGenerator {
+    protected final static PrimenumberWithSquareValue FIRST_EVEN_PRIMENUMBER = new PrimenumberWithSquareValue(new BigDecimal(2));
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PrimenumberGenerator.class);
+    protected final static PrimenumberWithSquareValue FIRST_ODD_PRIMENUMBER = new PrimenumberWithSquareValue(new BigDecimal(3));
 
-    private final List<PrimenumberWithSquareValue> primenumbers;
+    private final List<PrimenumberWithSquareValue> primenumbers = new ArrayList<>();
 
-    public PrimenumberGenerator(List<PrimenumberWithSquareValue> primenumbers) {
-        this.primenumbers = primenumbers;
-    }
+    public abstract BigDecimal getTestOffset();
 
-    public static List<PrimenumberWithSquareValue> getInitialPrimenumber() {
-        return new ArrayList<PrimenumberWithSquareValue>(Arrays.asList(new PrimenumberWithSquareValue(new BigDecimal(2))));
+    public abstract List<PrimenumberWithSquareValue> getUntestedPrimeNumbers();
+
+    public abstract PrimenumberWithSquareValue getFirstPrimeNumberDivider();
+
+    public AbstractNumberTester() {
+        this.primenumbers.add(getFirstPrimeNumberDivider());
     }
 
     public void addPrimenumbers(List<PrimenumberWithSquareValue> primenumbers) {
@@ -30,7 +30,6 @@ public class PrimenumberGenerator {
     }
 
     public Optional<PrimenumberWithSquareValue> getPrimenumber(BigDecimal number) {
-
         for (PrimenumberWithSquareValue primenumber : primenumbers) {
 
             int compareTo = primenumber.squareValue.compareTo(number);
@@ -49,21 +48,13 @@ public class PrimenumberGenerator {
         return Optional.of(new PrimenumberWithSquareValue(number));
     }
 
-    public List<PrimenumberWithSquareValue> getPrimenumbers() {
-        return primenumbers;
-    }
-
-    public void printPrimenumbers() {
-        primenumbers.forEach(primenumber -> LOGGER.info("{}", primenumber.primenumber));
-    }
-
     public static class PrimenumberWithSquareValue {
 
         private final BigDecimal primenumber;
 
         private final BigDecimal squareValue;
 
-        private PrimenumberWithSquareValue(BigDecimal primenumber) {
+        protected PrimenumberWithSquareValue(BigDecimal primenumber) {
             this.primenumber = primenumber;
             this.squareValue = primenumber.multiply(primenumber);
         }
