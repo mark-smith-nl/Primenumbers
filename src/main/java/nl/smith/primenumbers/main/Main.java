@@ -28,7 +28,7 @@ public class Main {
         BigDecimal number = primeNumberFactory.getFirstPrimeNumberDivider().getPrimenumber().add(offset);
         BigDecimal ceiling = primeNumberFactory.getFirstPrimeNumberDivider().getSquareValue();
 
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 2; i++) {
             List<PrimenumberWithSquareValue> newPrimenumbers = new ArrayList<>();
             LOGGER.info("Calculate cycle {}. Start: {}. Ceiling: {}.", i, number, ceiling);
             while (number.compareTo(ceiling) < 0) {
