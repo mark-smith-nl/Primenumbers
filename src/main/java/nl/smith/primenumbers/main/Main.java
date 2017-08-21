@@ -10,9 +10,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.smith.primenumber.AbstractNumberTester;
-import nl.smith.primenumber.AbstractNumberTester.PrimenumberWithSquareValue;
-import nl.smith.primenumber.OddNumberTester;
+import nl.smith.primenumber.PrimeNumberFactory;
+import nl.smith.primenumber.PrimeNumberFactory.PrimenumberWithSquareValue;
 
 public class Main {
 
@@ -21,19 +20,19 @@ public class Main {
     public static void main(String... args) {
         List<PrimenumberWithSquareValue> primenumbers = new ArrayList<>();
 
-        AbstractNumberTester abstractNumberTester = new OddNumberTester();
+        PrimeNumberFactory primeNumberFactory = new PrimeNumberFactory(PrimeNumberFactory.FACTORY_TYPE.ODD_NUMBER_TESTER);
 
-        primenumbers.addAll(abstractNumberTester.getUntestedPrimeNumbers());
-        BigDecimal offset = abstractNumberTester.getTestOffset();
+        primenumbers.addAll(primeNumberFactory.getUntestedPrimeNumbers());
+        BigDecimal offset = primeNumberFactory.getTestOffset();
 
-        BigDecimal number = abstractNumberTester.getFirstPrimeNumberDivider().getPrimenumber().add(offset);
-        BigDecimal ceiling = abstractNumberTester.getFirstPrimeNumberDivider().getSquareValue();
+        BigDecimal number = primeNumberFactory.getFirstPrimeNumberDivider().getPrimenumber().add(offset);
+        BigDecimal ceiling = primeNumberFactory.getFirstPrimeNumberDivider().getSquareValue();
 
         for (int i = 1; i <= 4; i++) {
             List<PrimenumberWithSquareValue> newPrimenumbers = new ArrayList<>();
             LOGGER.info("Calculate cycle {}. Start: {}. Ceiling: {}.", i, number, ceiling);
             while (number.compareTo(ceiling) < 0) {
-                Optional<PrimenumberWithSquareValue> primenumber = abstractNumberTester.getPrimenumber(number);
+                Optional<PrimenumberWithSquareValue> primenumber = primeNumberFactory.getPrimenumber(number);
                 if (primenumber.isPresent()) {
                     // LOGGER.info("{}", primenumber.get().getPrimenumber());
                     newPrimenumbers.add(primenumber.get());
@@ -41,7 +40,7 @@ public class Main {
 
                 number = number.add(ONE).add(ONE);
             }
-            abstractNumberTester.addPrimenumbers(newPrimenumbers);
+            primeNumberFactory.addPrimenumbers(newPrimenumbers);
             primenumbers.addAll(newPrimenumbers);
             number = ceiling.add(offset);
             ceiling = ceiling.multiply(ceiling);
