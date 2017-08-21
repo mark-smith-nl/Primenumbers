@@ -1,4 +1,4 @@
-# Primenumbers (by M. SMith)
+# Primenumbers (by M. Smith)
 A prime number (or a prime) is a natural number greater than 1 that has no positive divisors other than 1 and itself.
 The fist prime number is two. All other primenumbers are odd numbers.
 
