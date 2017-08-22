@@ -28,13 +28,13 @@ public class Main {
         BigDecimal number = primeNumberFactory.getFirstPrimeNumberDivider().getPrimenumber().add(offset);
         BigDecimal ceiling = primeNumberFactory.getFirstPrimeNumberDivider().getSquareValue();
 
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 1; i <= 4; i++) {
             List<PrimenumberWithSquareValue> newPrimenumbers = new ArrayList<>();
             LOGGER.info("Calculate cycle {}. Start: {}. Ceiling: {}.", i, number, ceiling);
             while (number.compareTo(ceiling) < 0) {
                 Optional<PrimenumberWithSquareValue> primenumber = primeNumberFactory.getPrimenumber(number);
                 if (primenumber.isPresent()) {
-                    // LOGGER.info("{}", primenumber.get().getPrimenumber());
+                     LOGGER.info("{}", primenumber.get().getPrimenumber());
                     newPrimenumbers.add(primenumber.get());
                 }
 
