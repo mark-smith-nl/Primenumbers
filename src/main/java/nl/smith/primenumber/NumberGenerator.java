@@ -29,7 +29,7 @@ public class NumberGenerator {
             throw new IllegalArgumentException("Values for current larger then ceiling are not allowed.");
         }
         if (offset.compareTo(BigDecimal.ONE) == -1) {
-            throw new IllegalArgumentException("VValues for offset smaller then one are not allowed.");
+            throw new IllegalArgumentException("Values for offset smaller then one are not allowed.");
         }
         this.current = current;
         this.offset = offset;
