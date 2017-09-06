@@ -22,7 +22,7 @@ public class NumberGenerator {
     }
 
     public synchronized BigDecimal getNumber() {
-        if (current.compareTo(ceiling) > 1) {
+        if (current.compareTo(ceiling) == 1) {
             return null;
         }
 
@@ -30,6 +30,18 @@ public class NumberGenerator {
         current = current.add(offset);
 
         return number;
+    }
+
+    public static void main(String[] args) {
+        NumberGenerator numberGenerator = new NumberGenerator(BigDecimal.ONE, new BigDecimal(3), new BigDecimal(20));
+        BigDecimal current;
+        do {
+            current = numberGenerator.getNumber();
+            System.out.println(current);
+        } while (current != null);
+
+        System.out.println("Einde main");
+
     }
 
 }
