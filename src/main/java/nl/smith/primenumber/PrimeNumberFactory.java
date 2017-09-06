@@ -8,7 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class PrimeNumberFactory {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import nl.smith.primenumbers.main.Main;
+
+public class PrimeNumberFactory implements Runnable {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(PrimeNumberFactory.class);
 
     private final static PrimenumberWithSquareValue FIRST_EVEN_PRIMENUMBER = new PrimenumberWithSquareValue(new BigDecimal(2));
 
@@ -16,7 +23,11 @@ public class PrimeNumberFactory {
 
     public enum FACTORY_TYPE {
 
-        ALL_NUMBER_TESTER(ONE, FIRST_EVEN_PRIMENUMBER), ODD_NUMBER_TESTER(ONE.add(ONE), FIRST_EVEN_PRIMENUMBER, FIRST_ODD_PRIMENUMBER);
+        /** Test every number to be a prime except the first even prime number */
+        ALL_NUMBER_TESTER(ONE, FIRST_EVEN_PRIMENUMBER),
+
+        /** Test only odd numbers to be a prime except the first even prime number and the first odd prime number */
+        ODD_NUMBER_TESTER(ONE.add(ONE), FIRST_EVEN_PRIMENUMBER, FIRST_ODD_PRIMENUMBER);
 
         private BigDecimal testOffset;
 
@@ -34,30 +45,36 @@ public class PrimeNumberFactory {
         }
     }
 
-    private final FACTORY_TYPE testerType;
+    private final FACTORY_TYPE factoryType;
 
     private final List<PrimenumberWithSquareValue> primenumbers = new ArrayList<>();
 
-    public PrimeNumberFactory(FACTORY_TYPE testerTpe) {
-        this.testerType = testerTpe;
+    public PrimeNumberFactory(Main main, FACTORY_TYPE factoryType) {
+        this.factoryType = factoryType;
         this.primenumbers.add(getFirstPrimeNumberDivider());
     }
 
-    public PrimeNumberFactory(FACTORY_TYPE testerTpe, List<PrimenumberWithSquareValue> primenumbers) {
-        this.testerType = testerTpe;
+    public PrimeNumberFactory(FACTORY_TYPE factoryType, List<PrimenumberWithSquareValue> primenumbers) {
+        this.factoryType = factoryType;
         addPrimenumbers(primenumbers);
     }
 
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+
+    }
+
     public BigDecimal getTestOffset() {
-        return testerType.testOffset;
+        return factoryType.testOffset;
     }
 
     public List<PrimenumberWithSquareValue> getUntestedPrimeNumbers() {
-        return testerType.untestedPrimeNumbers;
+        return factoryType.untestedPrimeNumbers;
     }
 
     public PrimenumberWithSquareValue getFirstPrimeNumberDivider() {
-        return testerType.getFirstPrimeNumberDivider();
+        return factoryType.getFirstPrimeNumberDivider();
     }
 
     public void addPrimenumbers(List<PrimenumberWithSquareValue> primenumbers) {
@@ -65,6 +82,7 @@ public class PrimeNumberFactory {
     }
 
     public Optional<PrimenumberWithSquareValue> getPrimenumber(BigDecimal number) {
+        LOGGER.info("\tTesting number: {}", number);
         for (PrimenumberWithSquareValue primenumber : primenumbers) {
 
             int compareTo = primenumber.squareValue.compareTo(number);
